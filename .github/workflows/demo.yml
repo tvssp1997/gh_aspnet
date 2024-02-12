@@ -4,7 +4,7 @@ on:
   push:
     branches: [ "main" ]
 env:
-  AWS_REGION: AWS_REGION
+  AWS_REGION: us-west-1
 
 # permissions:
 #   contents: read
