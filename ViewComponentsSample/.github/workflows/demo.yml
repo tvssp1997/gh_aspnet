@@ -1,27 +1,18 @@
-name: CICD for .Net Project
+name: Deploy to Amazon ECS
+
 on:
-    push:
-        branches:
-            - main
+  push:
+    branches: [ "main" ]
+
+permissions:
+  contents: read
 
 jobs:
-    build:
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout Repository
-              uses: actions/checkout@v3
-            - name: Setup .NET
-              uses: actions/setup-dotnet@v3
-              with:
-                dotnet-version: '6.0.x'
-            - name: Setup .NET
-              uses: actions/setup-dotnet@v1
-              with:
-                dotnet-version: '6.0.x'
-            - name: Restore dependencies
-              run: dotnet restore
-            - name: Build
-              run: dotnet build --configuration Release
-            - name: Test
-              run: dotnet test --configuration Release --no-build
-        
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+  
