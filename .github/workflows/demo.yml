@@ -53,7 +53,7 @@ jobs:
         # docker build -t sample-ecr-test -f ./Dockerfile.yml .
         # docker tag sample-ecr-test:latest 857139620000.dkr.ecr.us-west-1.amazonaws.com/sample-ecr-test:latest
         # docker push 857139620000.dkr.ecr.us-west-1.amazonaws.com/sample-ecr-test:latest
-        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -f ./Dockerfile .
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
