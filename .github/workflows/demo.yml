@@ -5,7 +5,7 @@ on:
     branches: [ "main" ]
 
 env:
-  ECR_REPOSITORY: 857139620000.dkr.ecr.us-west-1.amazonaws.com/sample-ecr-test           # set this to your Amazon ECR repository name
+  ECR_REPOSITORY: ${{secrets.ECR_REPOSITORY}}           # set this to your Amazon ECR repository name
   # ECS_SERVICE: MY_ECS_SERVICE                 # set this to your Amazon ECS service name
   # ECS_CLUSTER: MY_ECS_CLUSTER                 # set this to your Amazon ECS cluster name
   # ECS_TASK_DEFINITION: MY_ECS_TASK_DEFINITION # set this to the path to your Amazon ECS task definition
@@ -45,17 +45,13 @@ jobs:
     - name: Build, tag, and push image to Amazon ECR
       id: build-image
       env:
-        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry.name }}
         IMAGE_TAG: ${{ github.sha }}
       run: |
         cd ./ViewComponentsSample/
-        # docker build -t sample-ecr-test -f ./Dockerfile.yml .
-        # docker tag sample-ecr-test:latest 857139620000.dkr.ecr.us-west-1.amazonaws.com/sample-ecr-test:latest
-        # docker push 857139620000.dkr.ecr.us-west-1.amazonaws.com/sample-ecr-test:latest
-        docker build -t sample-ecr-test:$IMAGE_TAG -f ./Dockerfile .
-        docker tag sample-ecr-test:$IMAGE_TAG $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-        echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+        docker build -t $ECR_REPOSITORY -f ./Dockerfile .
+        # docker tag $ECR_REPOSITORY:$IMAGE_TAG $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        # docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        # echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
     # - name: Fill in the new image ID in the Amazon ECS task definition
     #   id: task-def
