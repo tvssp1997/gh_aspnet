@@ -8,6 +8,7 @@ on:
 env:
   AWS_REGION: $${{secrets.AWS_REGION}}
   ECR_REPOSITORY: ${{secrets.ECR_REPO_URL}}/${{secrets.ECR_IMAGE_NAME}}
+  ECR_IMAGE_NAME: ${{secrets.ECR_IMAGE_NAME}}
 
 jobs:
   deploy:
@@ -38,8 +39,8 @@ jobs:
       run: |
         cd ./ViewComponentsSample/
         docker build -t ${{secrets.ECR_IMAGE_NAME}} -f ./Dockerfile.yml . 
-        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-        echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+        docker push $ECR_IMAGE_NAME/$ECR_REPOSITORY:$IMAGE_TAG
+        echo "image=$ECR_IMAGE_NAME/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
         # # docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         # docker tag ${{secrets.ECR_IMAGE_NAME}}:$IMAGE_TAG ${{secrets.ECR_REPO_URL}}/${{secrets.ECR_IMAGE_NAME}}:$IMAGE_TAG
