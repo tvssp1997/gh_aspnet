@@ -6,7 +6,7 @@ on:
 
 env:
   AWS_REGION: us-west-1                   # set this to your preferred AWS region, e.g. us-west-1
-  ECR_REPOSITORY: 857139620000.dkr.ecr.us-west-1.amazonaws.com/net-project-gha           # set this to your Amazon ECR repository name
+  ECR_REPOSITORY: 857139620000.dkr.ecr.us-west-1.amazonaws.com/sample-ecr-test           # set this to your Amazon ECR repository name
   # ECS_SERVICE: MY_ECS_SERVICE                 # set this to your Amazon ECS service name
   # ECS_CLUSTER: MY_ECS_CLUSTER                 # set this to your Amazon ECS cluster name
   # ECS_TASK_DEFINITION: MY_ECS_TASK_DEFINITION # set this to the path to your Amazon ECS task definition
@@ -53,7 +53,7 @@ jobs:
         # docker build -t sample-ecr-test -f ./Dockerfile.yml .
         # docker tag sample-ecr-test:latest 857139620000.dkr.ecr.us-west-1.amazonaws.com/sample-ecr-test:latest
         # docker push 857139620000.dkr.ecr.us-west-1.amazonaws.com/sample-ecr-test:latest
-        docker build -t ecr-image -f ./Dockerfile .
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -f ./Dockerfile .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
