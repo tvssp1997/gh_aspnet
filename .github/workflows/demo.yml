@@ -69,5 +69,3 @@ jobs:
         wait-for-service-stability: true
 
 
-
-dotnet publish -p PublishProfile=DefaultContainer -p ContainerArchiveOutputPath=./images/sdk-container-demo.tar.gz
