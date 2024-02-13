@@ -5,7 +5,6 @@ on:
     branches: [ "main" ]
 
 env:
-  AWS_REGION: us-west-1                   # set this to your preferred AWS region, e.g. us-west-1
   ECR_REPOSITORY: 857139620000.dkr.ecr.us-west-1.amazonaws.com/sample-ecr-test           # set this to your Amazon ECR repository name
   # ECS_SERVICE: MY_ECS_SERVICE                 # set this to your Amazon ECS service name
   # ECS_CLUSTER: MY_ECS_CLUSTER                 # set this to your Amazon ECS cluster name
@@ -32,7 +31,7 @@ jobs:
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ env.AWS_REGION }} 
+        aws-region: ${{ secrets.AWS_REGION }} 
 
 
     - name: Login to Amazon ECR
@@ -53,7 +52,8 @@ jobs:
         # docker build -t sample-ecr-test -f ./Dockerfile.yml .
         # docker tag sample-ecr-test:latest 857139620000.dkr.ecr.us-west-1.amazonaws.com/sample-ecr-test:latest
         # docker push 857139620000.dkr.ecr.us-west-1.amazonaws.com/sample-ecr-test:latest
-        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+        docker build -t sample-ecr-test:$IMAGE_TAG .
+        docker tag sample-ecr-test:$IMAGE_TAG $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
