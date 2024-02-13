@@ -38,4 +38,6 @@ jobs:
         IMAGE_TAG: ${{ github.sha }}
       run: |
         cd ./ViewComponentsSample/
-        docker build -t ${{secrets.ECR_IMAGE_NAME}} -f ./Dockerfile.yml . 
+        docker build -t ${{secrets.ECR_IMAGE_NAME}}:$IMAGE_TAG -f ./Dockerfile.yml . 
+        
+
