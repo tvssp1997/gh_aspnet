@@ -5,6 +5,10 @@ on:
   push:
     branches: [ "main" ]
 
+env:
+  AWS_REGION: $${{secrets.AWS_REGION}}
+  ECR_REPOSITORY: ${{secrets.ECR_REPO_URL}}/${{secrets.ECR_IMAGE_NAME}}
+
 jobs:
   deploy:
     name: Deploy
@@ -29,11 +33,15 @@ jobs:
     - name: Build, tag, and push image to Amazon ECR
       id: build-image
       env:
-        # ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         IMAGE_TAG: ${{ github.sha }}
       run: |
         cd ./ViewComponentsSample/
-        docker build -t ${{secrets.ECR_IMAGE_NAME}} -f ./Dockerfile.yml .
-        docker tag ${{secrets.ECR_IMAGE_NAME}}:$IMAGE_TAG ${{secrets.ECR_REPO_URL}}/${{secrets.ECR_IMAGE_NAME}}:$IMAGE_TAG
-        docker push ${{secrets.ECR_REPO_URL}}/${{secrets.ECR_IMAGE_NAME}}:$IMAGE_TAG
-        # echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+        docker build -t ${{secrets.ECR_IMAGE_NAME}} -f ./Dockerfile.yml . 
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+
+        # # docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        # docker tag ${{secrets.ECR_IMAGE_NAME}}:$IMAGE_TAG ${{secrets.ECR_REPO_URL}}/${{secrets.ECR_IMAGE_NAME}}:$IMAGE_TAG
+        # docker push ${{secrets.ECR_REPO_URL}}/857139620000.dkr.ecr.us-west-1.amazonaws.com/${{secrets.ECR_IMAGE_NAME}}:$IMAGE_TAG
+        # # echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
