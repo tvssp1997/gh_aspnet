@@ -4,8 +4,6 @@ on:
   push:
     branches: [ "main" ]
 
-env:
-  # ECR_REPOSITORY:           # set this to your Amazon ECR repository name
 jobs:
   deploy:
     name: Deploy
