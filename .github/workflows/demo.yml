@@ -18,10 +18,11 @@ permissions:
   contents: read
 
 jobs:
-  container: 
+  deploy:
+    name: Deploy
     runs-on: ubuntu-latest
-    container:
-      image: ubuntu-latest
+    environment: dev
+
     steps:
     - name: Checkout
       uses: actions/checkout@v1
@@ -34,32 +35,13 @@ jobs:
         aws-region: ${{ env.AWS_REGION }}
 
     - name: Login to Amazon ECR
-      id: login-ecr
-      uses: aws-actions/amazon-ecr-login@v1
+      run: aws ecr get-login-password --region us-west-1 | docker login --username AWS --password-stdin 857139620000.dkr.ecr.us-west-1.amazonaws.com
 
-    - name: Build, tag, and push image to Amazon ECR
-      id: build-image
-      env:
-        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        IMAGE_TAG: ${{ github.sha }}
-      run: |
-       docker build -t net-project-gha .
-       docker tag net-project-gha:latest 857139620000.dkr.ecr.us-west-1.amazonaws.com/net-project-gha:latest
-       docker push 857139620000.dkr.ecr.us-west-1.amazonaws.com/net-project-gha:latest
+    - name: Build Docker image
+      run: docker build -t net-project-gha .
 
+    - name: Tag Docker image
+      run: docker tag net-project-gha:latest 857139620000.dkr.ecr.us-west-1.amazonaws.com/net-project-gha:latest
 
-    # - name: Fill in the new image ID in the Amazon ECS task definition
-    #   id: task-def
-    #   uses: aws-actions/amazon-ecs-render-task-definition@v1
-    #   with:
-    #     task-definition: ${{ env.ECS_TASK_DEFINITION }}
-    #     container-name: ${{ env.CONTAINER_NAME }}
-    #     image: ${{ steps.build-image.outputs.image }}
-
-    # - name: Deploy Amazon ECS task definition
-    #   uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-    #   with:
-    #     task-definition: ${{ steps.task-def.outputs.task-definition }}
-    #     service: ${{ env.ECS_SERVICE }}
-    #     cluster: ${{ env.ECS_CLUSTER }}
-    #     wait-for-service-stability: true
+    - name: Push Docker image to ECR
+      run: docker push 857139620000.dkr.ecr.us-west-1.amazonaws.com/net-project-gha:latest
