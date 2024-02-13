@@ -45,7 +45,7 @@ jobs:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         IMAGE_TAG: ${{ github.sha }}
       run: |
-        cd ././
+        cd ./ViewComponentsSample/
         docker build -t sample-ecr-test -f ./Dockerfile.yml .
         docker tag sample-ecr-test:latest 857139620000.dkr.ecr.us-west-1.amazonaws.com/sample-ecr-test:latest
         docker push 857139620000.dkr.ecr.us-west-1.amazonaws.com/sample-ecr-test:latest
