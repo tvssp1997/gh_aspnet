@@ -39,6 +39,6 @@ jobs:
       run: |
         cd ./ViewComponentsSample/
         docker build -t ${{secrets.ECR_IMAGE_NAME}}:$IMAGE_TAG -f ./Dockerfile.yml . 
-        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        docker push $ECR_REPOSITORY:$IMAGE_TAG
 
 
